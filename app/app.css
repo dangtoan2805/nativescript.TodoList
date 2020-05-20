@@ -1,0 +1,183 @@
+﻿
+@import "~@nativescript/theme/css/core.css";
+@import "~@nativescript/theme/css/default.css";
+
+
+.icon{
+    font-family: "Font Awesome","FontAwesome";
+}
+
+.my-label{
+    font-size: 16px;
+    color: #9C27B0;
+}
+
+.my-text{
+    font-size: 16;
+}
+
+/*----------Page-----------*/
+.my-page-title{
+    font-size: 20;
+    color: white;
+}
+
+.my-page-act{
+    padding:30 20 10 20;
+    background-color: #5a5a5a;
+}
+
+.my-page-icon{
+    color: white;
+    font-size: 25;
+    text-align: left;
+    font-family: "Font Awesome","FontAwesome";
+}
+.my-page-icon-left{
+    padding-right: 30;
+}
+
+.my-page-text{
+    font-size: 16;
+    color: white;
+}
+
+.my-page-body{
+    padding:10 20 0 20;
+}
+
+/*----------Modal------------*/
+.color-modal{
+    background-color: #5a5a5a;
+}
+
+.my-modal{
+    padding: 15 20;
+    background-color: white;
+    border-width: 1px;
+    vertical-align: bottom;
+}
+
+.my-modal-text{ 
+    width: 150px;
+    text-align: right;
+    font-size: 16;
+    color: #3d5afe;
+}
+
+.my-modal-icon{
+    width: 150px;
+    text-align: left;
+    font-size: 30;
+    color: #3d5afe;
+    font-family: "Font Awesome","FontAwesome";
+}
+
+.my-modal-title{
+    font-size: 20;
+}
+
+.my-selectDateTime{
+    height: 90px;
+    border-radius: 10;
+}
+
+/*-------ListView Item--------*/
+.my-listView{
+    background-color:white;
+    padding: 10 20;
+}
+
+.bg-swipe{
+    background-color: #fafafa;
+    border-top-left-radius: 22;
+    border-bottom-left-radius: 22;
+    margin: 10 0;
+}
+
+.clr-del{
+    color: red;
+    text-align: center;
+}
+
+.clr-edit{
+    color: #3d5afe;
+    text-align: center;
+}
+
+.item-icon{
+    font-size: 25;
+    text-align: left;
+    font-family: "Font Awesome","FontAwesome";
+}
+
+.text-imp{
+    color: #9C27B0;
+}
+
+.text-empty{
+    text-align: center;
+    padding-top: 50;
+    color: gray;
+    font-size: 16;
+}
+
+/*------------------------*/
+.my-tab{
+    color: black;
+    text-align: center;
+    padding: 15 0;
+    background-color: transparent;
+    width: 50%;
+}
+
+.my-tab-select{
+    border-top-left-radius: 20;
+    border-top-right-radius: 20;
+    background-color: white;
+    width: 50%;
+}
+
+.my-tab-bg{
+    border-top-left-radius: 20;
+    border-top-right-radius: 20;
+    background-color:#fafafa;
+
+}
+
+.my-btn{
+    text-align: center;
+    vertical-align: middle;
+    color: black;
+    background-color: #fafafa;
+    padding: 15 0;
+    border-top-left-radius: 25;
+    border-top-right-radius: 25;
+}
+
+@keyframes rightToLeft {
+    from { transform: translateX(100);
+            opacity: 0; }
+    to { transform: translateX(0);opacity: 1; }
+}
+
+.rightToLeft {
+    animation-name: rightToLeft;
+    animation-duration: 0.5;
+    animation-fill-mode: forwards;
+}
+
+.leftToRight {
+    animation-name: leftToRight;
+    animation-duration: 0.5;
+    animation-fill-mode: forwards;
+}
+
+@keyframes leftToRight {
+    from { transform: translateX(-100);
+        opacity: 0; }
+    to { transform: translateX(0);opacity: 1; }
+}
+
+
+

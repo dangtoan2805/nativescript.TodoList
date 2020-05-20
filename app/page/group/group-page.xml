@@ -1,0 +1,54 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd"  
+    xmlns:lv="nativescript-ui-listview"
+    navigatingTo="onNavigatingTo"
+    actionBarHidden="true"
+    loaded="{{ onPageLoaded }}">
+    <ActionBar title=""></ActionBar>
+    <StackLayout >
+        <FlexboxLayout justifyContent="space-between" alignItems="center" class="my-page-act">
+            <Label text="&#xf104;" tap="{{ onBack }}"  class="my-page-icon my-page-icon-left"/>
+            <Label text="Group" class="my-page-title" />
+            <Label text="New" tap="{{ onCreateGroup }}" class="my-page-text"/>
+        </FlexboxLayout>
+        <!--Content-->
+        <GridLayout rows="*">
+            <ScrollView loaded="{{ isEmpty }}">
+                <StackLayout id="content" row="0">
+                    <Label class="text-empty" text="No group !"  
+                        visibility="{{ isEmpty ? 'visible' : 'collapsed' }}"/>
+                    <lv:RadListView id="listView"  height="600" swipeActions="true" 
+                        visibility="{{ isEmpty ? 'collapsed' : 'visible' }}"
+                        itemSwipeProgressStarted="onSwipeCellStarted" 
+                        itemTap="{{ onItemTap }}"
+                        items="{{ listGroup }}"
+                        itemReorder="true">
+                        <lv:RadListView.listViewLayout>
+                            <lv:ListViewLinearLayout scrollDirection="Vertical"/>                            
+                        </lv:RadListView.listViewLayout>
+                        <lv:RadListView.itemTemplate >
+                            <GridLayout rows="*,*" class="my-listView">
+                                <Label row="0"  text="{{ name }}" class="my-text"/>
+                                <Label row="1" text="0/5" class="my-text" color="blue"  />
+                            </GridLayout>  
+                        </lv:RadListView.itemTemplate>
+                        <lv:RadListView.itemSwipeTemplate>
+                            <GridLayout columns="*,140"   >
+                                <GridLayout col="1" columns="*,*" id="swipeItem" class="bg-swipe" 
+                                    orientation="horizontal"> 
+                                    <Label col="0" text="Edit" class=" clr-edit" tap="onEditGroup"  />
+                                    <Label col="1" text="Delete" class=" clr-del" tap="onDeleteGroup" />
+                                </GridLayout>
+                            </GridLayout>
+                        </lv:RadListView.itemSwipeTemplate>
+                        <lv:ReorderHandle col="1" verticalAlignment="center">
+                            <Image android:src="res://reorder_icon" ios:src="res://reorder-icon" 
+                                stretch="none" verticalAlignment="stretch" margin="16"/>
+                        </lv:ReorderHandle>
+                    </lv:RadListView>
+                </StackLayout>
+            </ScrollView> 
+        </GridLayout> 
+        <!--Content-->
+    </StackLayout>
+</Page>
+

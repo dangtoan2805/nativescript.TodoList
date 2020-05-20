@@ -1,0 +1,23 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd"  
+    showingModally="onShowingModally"
+    ios:backgroundColor="transparent" 
+    android:class="color-modal">
+    <ScrollView>> 
+        <GridLayout rows="*, *, *" columns="*" android:borderRadius="30px" class="my-modal">
+            <FlexboxLayout row="0" col="0"  justifyContent="space-between" ios:visibility="visible" android:visibility="collapsed"  >
+                <Label text="Close" tap="onCloseModal" class=" my-modal-nav"/>
+                <Label text="Done" tap="onDone" class="my-modal-nav"/>
+            </FlexboxLayout>
+            <!--Content-->
+            <DatePicker day="{{ day }}"
+                        month="{{ month }}"
+                        year="{{ year }}">
+            </DatePicker>   
+            <!--Content-->
+            <FlexboxLayout row="2" col="0" justifyContent="space-between" android:visibility="visible" ios:visibility="collapsed">
+                <Label text="Close" tap="onCloseModal" class=" my-modal-nav"/>
+                <Label text="Done" tap="onDone" class="my-modal-nav"/>
+            </FlexboxLayout>         
+        </GridLayout>
+    </ScrollView>
+</Page>
