@@ -1,34 +1,37 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd"
     navigatingTo="onNavigatingTo"
     actionBarHidden="true"
-    loaded="onPageLoaded">
+    loaded="{{ onPageLoaded }}">
     <ActionBar title=""></ActionBar>
     <ScrollView >
         <StackLayout >
             <FlexboxLayout justifyContent="space-between" alignItems="center" class="my-page-act">
-                <Label text="&#xf104;" tap="{{ onBack }}"  class="my-page-icon"/>
+                <Label text="&#xf104;" tap="{{ onBack }}"  class="my-page-icon my-page-icon-left"/>
                 <Label text="Task" class="my-page-icon" />
-                <Label text="Delete" tap="{{ onDone }}" class="my-page-text"/>
+                <Label text="Delete" tap="{{ onDeleteTask }}" class="my-page-text"/>
             </FlexboxLayout>
             <!--Content-->
+            <StackLayout id="content">
             <GridLayout rows="*, 40, 60, 50, 30, *,*" columns="* , *" class="my-page-body">
                 <TextView row="0" col="0" colSpan="2" hint="Task..." text="{{ task.name }}" 
                         width="100%" class="my-text m-b-20" minHeight="20px" maxLength="50"/>
                 <Label row="1" col="0" text="Group" textWrap="true" verticalAlignment="center" class="my-label" />
-                <StackLayout row="1" col="1" orientation="horizontal" horizontalAlignment="right" width="100%">
-                    <Label text="Truong Hoc " class="my-text" verticalAlignment="center"/>
+                <StackLayout row="1" col="1" orientation="horizontal" horizontalAlignment="right" width="100%"
+                        tap="{{ onChangeGroup }}">
+                    <Label text=" {{ grName }} " class="my-text" verticalAlignment="center"/>
                     <Label  text=" &#xf105;" textWrap="true" verticalAlignment="center" fontSize="20" class="icon"/>
                 </StackLayout>
                 <Label row="2" col="0" text="Improtant" textWrap="true" verticalAlignment="center" class="my-label"/>
-                <Switch row="2" col="1" checked="{{ task.important }}" style="margin-right:-4" />
+                <Switch row="2" col="1" checked="{{ task.important }}" style="margin-right:-3" />
                 <Label row="3" col="0" text="Remind" textWrap="true" verticalAlignment="center" class="my-label"/>
-                <Switch row="3" col="1" checked="{{ remind }}" style="margin-right:-4" />
+                <Switch row="3" col="1" checked="{{ remind }}" style="margin-right:-3" />
                 <Button row="4" col="0" text="11/2/1444" tap="" class="my-selectDateTime" isEnabled="{{ remind }}" />
                 <Button row="4" col="1" text="12:20 " tap="" class="my-selectDateTime" isEnabled="{{ remind }}"/>
                 <Label row="5" col="0" text="Note" textWrap="true" verticalAlignment="center" class="my-label" style="padding-top:30" />
                 <TextView row="6" col="0" colSpan="2" hint="..." text="{{ task.note }}" width="100%" borderWidth="1px" 
                         borderRadius="5" class="my-text p-x-10 p-y-5" maxLength="250"/>
             </GridLayout>
+            </StackLayout>
             <!--Content-->
         </StackLayout>
     </ScrollView>

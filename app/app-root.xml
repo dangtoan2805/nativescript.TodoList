@@ -1,2 +1,1 @@
-<Frame defaultPage="page/main/main-page">
-</Frame>
+<Frame defaultPage="page/preloaded/preloaded-page"></Frame>

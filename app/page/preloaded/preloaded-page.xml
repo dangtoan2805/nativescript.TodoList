@@ -1,0 +1,10 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd"  
+    navigatingTo="onNavigatingTo"
+    actionBarHidden="true" 
+    loaded="onPageLoaded">
+    <ActionBar title=""></ActionBar>
+    <StackLayout width="100" height="100" backgroundColor="transparent">
+        <ActivityIndicator  loaded="onLoaded" busy="true"  width="50" height="50"/>    
+        <Label text="Loading ..." horizontalAlignment="center" color="blue"/>
+    </StackLayout>          
+</Page>

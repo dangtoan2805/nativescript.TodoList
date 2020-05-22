@@ -1,61 +1,33 @@
 const fromObject = require("tns-core-modules/data/observable").fromObject;
 const ObservableArray = require("tns-core-modules/data/observable-array").ObservableArray;
 //Page
-const main_page = "page/main/main-page"
+const main_page = "page/main/main-page";
+const task_page ="page/task/task-page";
 //comps
 const comps= require("../../components/comps");
 const myAnim= require("../../anim/anim").myAnim;
 //Model
-const db = require('../../modal/DBFirebase');
+const local = require('../../modal/DBLocal');
 const Group = require("../../modal/groupModal").Group;
 //View
 let listView;
 let content;
 //Attr
+let isTask=false;
 let objVM;
 let obj = null;
 let anim;
 let listGroup = new ObservableArray();
 
-//Database
-function updateDefault(grID){
-
-}
-
-function addGroup(text){
-    let gr = new Group(text);
-    listGroup.unshift(gr);
-    //Database
-    // db.addGroup(text);
-}
-
-function updateGroup(text){
-    obj.name=text;
-    listGroup.setItem(pos,obj);
-    refreshList(false);
-    //Database
-    // db.updateGroup(obj.id,text);
-}
-
-function delGroup(index){
-    let gr= listGroup.getItem(index);
-    listGroup.splice(index,1);
-    //Database
-    // db.deleteGroup(gr.id);
-}
-
-function loadData(){
-    // return db.getListGroup()
-}
-
-
-exports.createViewModel = (lv,ct) => {
+exports.createViewModel = (lv,ct, isT) => {
+    isTask=isT;
     listView=lv;
     content=ct;
     objVM = fromObject({
         "listGroup": listGroup,
-        "isEmpty": true,
+        "isEmpty": false,
         "onBack" : (args) => {
+
             args.object.page.frame.goBack();
         },
         "onItemTap": onItemTap,
@@ -65,31 +37,32 @@ exports.createViewModel = (lv,ct) => {
     });
     return objVM;
 }
-//Event Group Page
-function onPageLoaded(){
+// ****************Event on View******************** //
+// Treat database
+function onPageLoaded(){ // Load list group when loaded
     anim = new myAnim(); 
-    loadData();
-    refreshList(true);
+    disPlayList(local.getListGroups());
 }
 
-function disPlayList(ls){  
-    let len = ls.length;
-    if(len>0){
-        listGroup.splice(0,len);
-        for (const gr of data) {
-            listGroup.push(gr);
-        }
-    }
-    objVM.isEmpty= len > 0 ? false :true
-    refreshList(true);
-}
-
-function onItemTap (args)  {
+function onItemTap (args)  { // Return group for Main / Task
     let gr= listGroup.getItem(args.index);
-    updateDefault(gr.getID());
-    args.object.page.frame.navigate({
-        moduleName: main_page
-    });
+    if(isTask){
+        let data = {
+            task:null,
+            gr: {
+                id:gr.getID(),
+                name:gr.getName()
+            }
+        }
+        args.object.page.frame.navigate({
+            moduleName:task_page,
+            context:  data
+        });
+    }
+    else{
+        local.changeDefault(gr.getID());
+        args.object.page.frame.navigate(main_page);
+    }
 }
 
 function onShowPrompt(args,index){
@@ -97,7 +70,7 @@ function onShowPrompt(args,index){
         comps.ShowPrompt(args,"Group","",onPromptResult);
     else{
         obj=listGroup.getItem(index);
-        comps.ShowPrompt(args,"Group",obj.name,onPromptResult);
+        comps.ShowPrompt(args,"Group",obj.getName(),onPromptResult);
     }
 }
 
@@ -108,10 +81,52 @@ function onPromptResult(text){
         updateGroup(text);  
 }
 
-//Logic View
-function refreshList(start){
-    if(!start)
-        listView.refresh();
+// ******************** Logic View************************ //
+
+// Treat database
+function addGroup(text){
+    if(text!=null){
+        let gr = new Group();
+        gr.setName(text);
+        listGroup.unshift(gr);
+        refreshList();
+        //Database
+        local.addNewGroup(gr);
+    }
+}
+
+// Treat database
+function updateGroup(text){
+    obj.setName(text);
+    refreshList();
+    //Database
+    local.renameGroup(obj);
+}
+
+// Treat database
+function delGroup(index){
+    let gr= listGroup.getItem(index);
+    listGroup.splice(index,1);
+    refreshList();
+    //Database
+    local.delGroup(gr.getID());
+}
+
+function disPlayList(ls){  
+    let len = ls.length;
+    if(len>0){
+        listGroup.splice(0,len);
+        for (const gr of ls) {
+            listGroup.push(gr);
+        }
+    }
+    refreshList();
+}
+
+function refreshList(){
+    let len = listGroup.length;
+    objVM.isEmpty= len > 0 ? false :true
+    listView.refresh();
     anim.animCSS(content,"leftToRight");
 }
 

@@ -7,53 +7,17 @@ const task_page = "page/task/task-page"
 const group_page = "page/group/group-page";
 //Modal
 const Task = require("../../modal/taskModal").Task;
-const db = require('../../modal/DBFirebase');
-
+const local = require("../../modal/DBLocal");
 //View
 let listView;
 let tab;
 //Attr;
 let objVM;
 let anim;
-let grID;
-let groupName="Empty";
-let isShowDone=false;
+let isShowDone=false;2
 let listNot = [];
 let listDone = [];
 let listDisplay= new ObservableArray();
-
-//DataBase
-function addTask(task){ db.createTask(task,grID); }
-
-function updateStatusTask(task){ db.updateTask(task, grID); }
-
-function delTask(id){ db.delTask(id, grID); }
-
-function loadData(){
-    db.getGroupDefault()
-        .then(group => showGroup(group))
-        .catch(er => showError(er));     
-}
-
-function showGroup(gr){
-    if(gr!=null){
-        this.groupName=gr.getName();
-        let tasks= gr.getTasks();
-        for (const task of tasks) {
-            if(task.status)
-                listDone.push(task);
-            else
-                listNot.push(task);
-        }
-        displayList(listNot,false);
-    } 
-
-}
-
-function showError(er){
-    console.log(" !!!Err :");
-    console.log(er);
-}
 
 exports.createViewModel = (lv, seTab)=> {
     listView=lv;
@@ -61,7 +25,7 @@ exports.createViewModel = (lv, seTab)=> {
     objVM = new fromObject({
         "onPageLoaded":onPageLoaded,
         "listTask": listDisplay,
-        "grName":groupName,
+        "grName":"None",
         "isEmpty": true,
         "progress":updateProgress,
         "onShowTaskDone":onShowTaskDone,
@@ -74,18 +38,16 @@ exports.createViewModel = (lv, seTab)=> {
     });
     return objVM;
 }
-
-//Event Main Page
+/******************************Event on View*****************************/
+// Treat database
 function onPageLoaded(args){
-    loadData(); 
     anim= new myAnim(); 
-    anim.animCSS(listView,"leftToRight");
-    anim.animRightToLeft(tab);
+    resetList();
+    showGroup(local.getDefault());
 }
  
 function onItemTap (args){ // Change Status of Task
     let pos= args.index;
-    let task= listDisplay.getItem(pos);
     if(isShowDone)
         changeStatusTask(listDone,listNot,pos);
     else
@@ -110,7 +72,81 @@ function onShowTaskNot (){ // Show List Task has Status is FALSE
     displayList(listNot,false);  
 }
 
-function animDisplayList(flag){
+/***************************Logic View ********************************/
+
+function showGroup(gr){ //Load data for group default
+    if(gr!=null){
+        objVM.grName=gr.getName();
+        for (const t of gr.getTasks()) {
+            if(t.getStatus())
+                listDone.push(t);
+            else
+                listNot.push(t);
+        }
+        displayList(listNot,false);
+    } 
+}
+
+// Treat database
+function changeStatusTask(listPop,listPush,pos){  // Update Status for task on View
+    let task= listDisplay.getItem(pos);
+    task.status= !task.status;
+    //Update view
+    listDisplay.splice(pos,1);
+    listPop.splice(pos,1);
+    listPush.unshift(task);
+    checkEmpty(listPop.length);
+    //Update Database
+    local.changeStatus(task.getID());
+}
+
+// Treat database
+function deleteTask(list,pos){ // Delete task on View
+    let task= listDisplay.getItem(pos);
+    //Update view
+    listDisplay.splice(pos,1);
+    list.splice(pos,1);
+    checkEmpty(list.length);
+    //Update database
+    local.delTask(task.getID());
+}
+
+// Treat database
+function createNewTask(text){ // Add task om View
+    if(text!=null){
+        let obj = new Task();
+        obj.setName(text);
+        listDisplay.unshift(obj);
+        listNot.unshift(obj);
+        onShowTaskNot();
+        // Update database
+        local.addNewTask(obj);
+    }
+}
+
+function updateProgress(){// Update width of Progress bar
+    let not =listNot.length;
+    let done=listDone.length;
+    let total=not+done;
+    objVM.progress =(done/total)*100;
+} 
+
+function displayList(ls,flag){// Show list task on View
+    isShowDone=flag;
+    animDisplayList(flag);
+    let lenNew= ls.length;
+    let lenDisplay= listDisplay.length;
+    //Remove all item in list
+    listDisplay.splice(0,lenDisplay); 
+    if (lenNew !=0){
+        for (let i = 0; i < lenNew;  i++) {
+            listDisplay.push(ls[i]);
+        }
+    }   
+    checkEmpty(listDisplay.length);
+}
+
+function animDisplayList(flag){ // Manager Animation when show List Tasks
     if(flag){
         anim.animCSS(listView,"rightToLeft");
         anim.animLeftToRight(tab); 
@@ -121,68 +157,24 @@ function animDisplayList(flag){
     }
 }
 
-// Logic View
-function updateProgress(){// Update width of Progress bar
-    let not =listNot.length;
-    let done=listDone.length;
-    let total=not+done;
-    objVM.progress =(done/total)*100;
-} 
-
-function deleteTask(list,pos){ // Return Boolean For list isEmpty.
-    let task= listDisplay.getItem(pos);
-    //Update view
-    listDisplay.splice(pos,1);
-    list.splice(pos,1);
-    checkEmpty(list.length);
-    //Update database
-    delTask(task.id);
-}
-
-function checkEmpty(len){
+function checkEmpty(len){ // Check list task display weather null.
     objVM.isEmpty = len > 0 ? false:true;
 }
 
-function createNewTask(text){
-    if(text!=null){
-        let obj = new Task();
-        obj.setName(text);
-        listDisplay.unshift(obj);
-        listNot.unshift(obj);
-        addTask(obj);
-    }
+function resetList(){
+    let lenNot = listNot.length;
+    listNot.splice(0,lenNot);
+    let lenDone = listDone.length;
+    listDone.splice(0,lenDone);
 }
 
-function displayList(ls,flag){// Change between List Done (Status task ==  True) and List Not (Status task == False)
-    isShowDone=flag;
-    animDisplayList(flag);
-    let length= ls.length;
-    if (length !=0){
-        //Remove all item in list
-        listDisplay.splice(0,length); 
-        //Add new item 
-        for (let i = 0; i < length;  i++) {
-            listDisplay.push(ls[i]);
-        }
-    }   
-    checkEmpty(length);
-}
+/***************************Navigation********************************/
 
-function changeStatusTask(listPop,listPush,pos){ 
-    let task= listDisplay.getItem(pos);
-    task.status= !task.status;
-    //Update view
-    listDisplay.splice(pos,1);
-    listPop.splice(pos,1);
-    listPush.push(task);
-    checkEmpty(listPop.length);
-    //Update Database
-    updateStatusTask(task.id);
-}
-
-//Navigation
 function onShowGroups(args){
-    args.object.page.frame.navigate(group_page);
+    args.object.page.frame.navigate( {
+        moduleName: group_page,
+        context: false
+    });
 }
 
 function onCreateTask(args){
@@ -192,9 +184,7 @@ function onCreateTask(args){
 function onEditTask(args,index){
     args.object.page.frame.navigate({
         moduleName:task_page,
-        context:{ 
-            task: listDisplay.getItem(index)
-        }
+        context: local.getTaskEdit(listDisplay.getItem(index))
     })
 }
 

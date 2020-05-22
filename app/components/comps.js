@@ -1,6 +1,6 @@
 const date_comps = "components/date_comps/date-comps";
 const time_comps = "components/time_comps/time-comps";
-const prompt_comps ="components/prompt_comps/prompt-comps"
+const prompt_comps ="components/prompt_comps/prompt-comps";
 
 function ShowPrompt(args,title,text,callBack){
     let config = {
@@ -35,6 +35,7 @@ function ShowTime(args,hour, minute,callBack){
     }
     args.object.page.showModal(time_comps, config);
 }
+
 
 
 exports.ShowPrompt=ShowPrompt;

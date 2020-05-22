@@ -9,7 +9,7 @@
 
 .my-label{
     font-size: 16px;
-    color: #9C27B0;
+    color: #5a5a5a;
 }
 
 .my-text{
@@ -81,18 +81,25 @@
     height: 90px;
     border-radius: 10;
 }
+.my-modal-nav{
+    font-size: 16;
+    color: #3d5afe;
+}
 
 /*-------ListView Item--------*/
 .my-listView{
     background-color:white;
     padding: 10 20;
+    margin:10;
+    border-width: 1 ;
+    border-color: #fafafa;
+    border-radius: 15;
+    height: 60;
 }
 
 .bg-swipe{
-    background-color: #fafafa;
-    border-top-left-radius: 22;
-    border-bottom-left-radius: 22;
-    margin: 10 0;
+    background-color: white;
+    margin: 5 0;
 }
 
 .clr-del{

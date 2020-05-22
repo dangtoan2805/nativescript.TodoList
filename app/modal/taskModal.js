@@ -1,7 +1,7 @@
-let _idCount=0;
+let _idCount=Date.now().toString();
 
 function autoID(){
-    let id = "gr"+_idCount;
+    let id = "ts"+_idCount;
     _idCount++;
     return id;
 }
@@ -17,6 +17,10 @@ class Task {
         this.status = false;
     }
 
+    getStatus() {return this.status ;}
+
+    getID() {return this._id;}
+
     setName(str) {this.name=str;}
 
     setData(data){
@@ -25,7 +29,15 @@ class Task {
         this.important = data.important;
         this.status = data.status;
     }
-    
+
+    getData(){
+        return {
+            name: this.name,
+            note: this.note,
+            important: this.important,
+            status: this.status   
+        }
+    } 
 }
 
 exports.Task = Task;

@@ -26,9 +26,8 @@
                             <lv:ListViewLinearLayout scrollDirection="Vertical"/>                            
                         </lv:RadListView.listViewLayout>
                         <lv:RadListView.itemTemplate >
-                            <GridLayout rows="*,*" class="my-listView">
-                                <Label row="0"  text="{{ name }}" class="my-text"/>
-                                <Label row="1" text="0/5" class="my-text" color="blue"  />
+                            <GridLayout rows="*" class="my-listView">
+                                <Label row="0"  text="{{ _name }}" class="my-text"/>
                             </GridLayout>  
                         </lv:RadListView.itemTemplate>
                         <lv:RadListView.itemSwipeTemplate>

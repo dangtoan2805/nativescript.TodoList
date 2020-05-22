@@ -6,24 +6,10 @@ let vm;
 
 exports.onNavigatingTo = (args) => {
     let page = args.object;
-    // let context =args.context;
     let listView= page.getViewById('listView');
     let selectTab=page.getViewById("selectTab");
     vm=createViewModel(listView,selectTab);
     page.bindingContext = vm;
-}
-
-function getGroup(context){
-    if(context!=undefined){
-        let gr=context.gr;
-        if(gr!=undefined){
-            console.log(gr);
-            return gr;
-        }
-        else
-            return null;
-    }
-    return null;
 }
 
 //Custom Swipe Item

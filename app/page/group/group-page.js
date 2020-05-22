@@ -3,9 +3,10 @@ const groupVM= require("./group-view-model").createViewModel;
 let vm;
 let index;
 exports.onNavigatingTo = (args) => {
+    let isTask = args.context;
     let lv=args.object.page.getViewById("listView");
     let content =args.object.page.getViewById("content");
-    vm=groupVM(lv,content);
+    vm=groupVM(lv,content,isTask);
     args.object.bindingContext = vm;
 }
 

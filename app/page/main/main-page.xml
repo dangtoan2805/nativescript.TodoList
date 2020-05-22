@@ -4,64 +4,64 @@
     actionBarHidden="true" 
     loaded="{{ onPageLoaded }}">
     <ActionBar title=""></ActionBar>
-    <StackLayout >
-        <!--Nav-->
-        <FlexboxLayout justifyContent="space-between" alignItems="center" class="my-page-act" 
-            tap="{{ onShowGroups }}">
-            <Label text="{{ grName }}" class="my-page-title"/>
-            <Label text="&#xf0da;" class="my-page-icon"/>
-        </FlexboxLayout>
-        <!--Content-->
-        <GridLayout  rows="4,45,*,50" columns="*,*"  >
-            <!--Progress Tasks-->
-            <Progress row="0" col="0" colSpan="2" class="progress"
-                    value="{{ progress }}" maxValue="100" />
-            <!--Tab not And done-->
-            <Label row="1" col="0" colSpan="2" class="my-tab-bg"  />
-            <Label id="selectTab" row="1" col="0" class="my-tab-select" />
-            <Label row="1" col="0" text="Not" class="my-tab"  
-                tap="{{ onShowTaskNot }}" />
-            <Label row="1" col="1" text="Done" class="my-tab"  
-                tap="{{ onShowTaskDone }}" />
-            <!--List tasks-->              
-            <ScrollView row="2" col="0" colSpan="2" >
-                <StackLayout id="listView">
-                    <Label class="text-empty" text="No task for group !"  
-                        visibility="{{ isEmpty ? 'visible' : 'collapsed' }}"/>
-                    <lv:RadListView   height="600" swipeActions="true" itemReorder="true"
-                        visibility="{{ isEmpty ? 'collapsed' : 'visible' }}"
-                        itemSwipeProgressStarted="onSwipeCellStarted" 
-                        itemTap="{{ onItemTap }}"
-                        items="{{ listTask }}">
-                        <lv:RadListView.listViewLayout>
-                            <lv:ListViewLinearLayout scrollDirection="Vertical"/>                            
-                        </lv:RadListView.listViewLayout>
-                        <lv:RadListView.itemTemplate >
-                            <GridLayout rows="*,*" columns="4*,*" class="my-listView">
-                                <Label col="0" colSpan="2" row="0"  text="{{ name }}" class="my-text" 
-                                    color="{{ important ? 'pink': '#2196f3' }}" />
-                                <Label col="0" colSpan="2" row="1" text="{{ note }}" class="my-text"  />
-                                <Label col="1" row="0" rowSpan="2"  text="{{ status ? '&#xf046;' : '&#xf096;' }}" 
-                                    horizontalAlignment="right" class="item-icon"/>
-                            </GridLayout>  
-                        </lv:RadListView.itemTemplate>
-                        <lv:RadListView.itemSwipeTemplate>
-                            <GridLayout columns="*,140"   >
-                                <GridLayout col="1" columns="*,*" id="swipeItem" class="bg-swipe"  orientation="horizontal"> 
-                                    <Label col="0" text="Edit" class=" clr-edit" tap="onEditTask"  />
-                                    <Label col="1" text="Delete" class=" clr-del" tap="onDeleteTask" />
+        <StackLayout >
+            <!--Nav-->
+            <FlexboxLayout justifyContent="space-between" alignItems="center" class="my-page-act" 
+                tap="{{ onShowGroups }}">
+                <Label text="{{ grName }}" class="my-page-title"/>
+                <Label text="&#xf0da;" class="my-page-icon"/>
+            </FlexboxLayout>
+            <!--Content-->
+            <GridLayout  rows="4,45,*,50" columns="*,*"  >
+                <!--Progress Tasks-->
+                <Progress row="0" col="0" colSpan="2" class="progress"
+                        value="{{ progress }}" maxValue="100" />
+                <!--Tab not And done-->
+                <Label row="1" col="0" colSpan="2" class="my-tab-bg"  />
+                <Label id="selectTab" row="1" col="0" class="my-tab-select" />
+                <Label row="1" col="0" text="Not" class="my-tab"  
+                    tap="{{ onShowTaskNot }}" />
+                <Label row="1" col="1" text="Done" class="my-tab"  
+                    tap="{{ onShowTaskDone }}" />
+                <!--List tasks-->              
+                <ScrollView row="2" col="0" colSpan="2" marginTop="10" >
+                    <StackLayout id="listView">
+                        <Label class="text-empty" text="No task for group !"  
+                            visibility="{{ isEmpty ? 'visible' : 'collapsed' }}"/>
+                        <lv:RadListView   height="600" swipeActions="true" itemReorder="true"
+                            visibility="{{ isEmpty ? 'collapsed' : 'visible' }}"
+                            itemSwipeProgressStarted="onSwipeCellStarted" 
+                            itemTap="{{ onItemTap }}"
+                            items="{{ listTask }}">
+                            <lv:RadListView.listViewLayout>
+                                <lv:ListViewLinearLayout scrollDirection="Vertical"/>                            
+                            </lv:RadListView.listViewLayout>
+                            <lv:RadListView.itemTemplate >
+                                <GridLayout rows="*" columns="4*,*" class="my-listView">
+                                    <Label col="0" colSpan="2" row="0"  text="{{ name }}" class="my-text" 
+                                        color="{{ important ? 'pink': '#2196f3' }}" />
+                                    <!-- <Label col="0" colSpan="2" row="1" text="{{ note }}" class="my-text"  /> -->
+                                    <Label col="1" row="0" rowSpan="2"  text="{{ status ? '&#xf046;' : '&#xf096;' }}" 
+                                        horizontalAlignment="right" class="item-icon"/>
+                                </GridLayout>  
+                            </lv:RadListView.itemTemplate>
+                            <lv:RadListView.itemSwipeTemplate>
+                                <GridLayout columns="*,140"   >
+                                    <GridLayout col="1" columns="*,*" id="swipeItem" class="bg-swipe"  orientation="horizontal"> 
+                                        <Label col="0" text="Edit" class=" clr-edit" tap="onEditTask"  />
+                                        <Label col="1" text="Delete" class=" clr-del" tap="onDeleteTask" />
+                                    </GridLayout>
                                 </GridLayout>
-                            </GridLayout>
-                        </lv:RadListView.itemSwipeTemplate>
-                        <lv:ReorderHandle col="1" verticalAlignment="center">
-                            <Image android:src="res://reorder_icon" ios:src="res://reorder-icon" stretch="none" verticalAlignment="stretch" margin="16"/>
-                        </lv:ReorderHandle>
-                    </lv:RadListView>
-                </StackLayout>
-            </ScrollView>
-            <!--New Task-->
-            <Label row="3" col="0" colSpan="2" class="my-btn" text="Add new task" tap="{{ onCreateTask }}"  />
-        </GridLayout>
-        <!--Content-->
-    </StackLayout>
+                            </lv:RadListView.itemSwipeTemplate>
+                            <lv:ReorderHandle col="1" verticalAlignment="center">
+                                <Image android:src="res://reorder_icon" ios:src="res://reorder-icon" stretch="none" verticalAlignment="stretch" margin="16"/>
+                            </lv:ReorderHandle>
+                        </lv:RadListView>
+                    </StackLayout>
+                </ScrollView>
+                <!--New Task-->
+                <Label row="3" col="0" colSpan="2" class="my-btn" text="Add new task" tap="{{ onCreateTask }}"  />
+            </GridLayout>
+            <!--Content-->
+        </StackLayout>
 </Page>
